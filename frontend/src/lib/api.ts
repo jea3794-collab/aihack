@@ -20,6 +20,45 @@ export async function askQuestion(question: string): Promise<AskResponse> {
   return res.json();
 }
 
+export type DocumentItem = {
+  id: number;
+  subject: string;
+  title: string;
+  content: string;
+  source: string | null;
+};
+
+export async function fetchDocuments(subject?: string): Promise<DocumentItem[]> {
+  const url = new URL(`${API_BASE_URL}/api/documents`);
+  if (subject) url.searchParams.set("subject", subject);
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error("Failed to fetch documents");
+  return res.json();
+}
+
+export async function uploadDocumentPdf(params: {
+  file: File;
+  subject: string;
+  title?: string;
+  source?: string;
+}): Promise<DocumentItem> {
+  const formData = new FormData();
+  formData.append("file", params.file);
+  formData.append("subject", params.subject);
+  if (params.title) formData.append("title", params.title);
+  if (params.source) formData.append("source", params.source);
+
+  const res = await fetch(`${API_BASE_URL}/api/documents/upload`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.detail ?? "Failed to upload document");
+  }
+  return res.json();
+}
+
 export type QuizQuestion = {
   id: number;
   subject: string;
