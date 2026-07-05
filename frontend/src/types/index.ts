@@ -10,7 +10,9 @@ export type WrongNote = {
   questionId: number;
   subject: Subject;
   question: string;
+  choices: string[];
   submittedIndex: number;
   correctIndex: number;
+  explanation: string | null;
   createdAt: string;
 };
