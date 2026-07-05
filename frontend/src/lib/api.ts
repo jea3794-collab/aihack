@@ -153,3 +153,36 @@ export async function fetchDashboardComparison(userId: string): Promise<Dashboar
     })),
   };
 }
+
+export type ExamReference = {
+  round: number;
+  year: number;
+  examDate: string;
+  resultDate: string;
+  applicants: number;
+  examinees: number;
+  attendanceRate: number;
+  passed: number;
+  passRate: number;
+  failRate: number;
+  failRateNote: string;
+};
+
+export async function fetchExamReference(): Promise<ExamReference> {
+  const res = await fetch(`${API_BASE_URL}/api/dashboard/exam-reference`);
+  if (!res.ok) throw new Error("Failed to fetch exam reference");
+  const data = await res.json();
+  return {
+    round: data.round,
+    year: data.year,
+    examDate: data.exam_date,
+    resultDate: data.result_date,
+    applicants: data.applicants,
+    examinees: data.examinees,
+    attendanceRate: data.attendance_rate,
+    passed: data.passed,
+    passRate: data.pass_rate,
+    failRate: data.fail_rate,
+    failRateNote: data.fail_rate_note,
+  };
+}

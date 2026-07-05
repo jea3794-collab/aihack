@@ -46,5 +46,6 @@ app/
 | GET | `/api/wrong-notes?user_id=` | 오답노트 목록. 응답: `{id, questionId, subject, question, choices, submittedIndex, correctIndex, explanation, createdAt}[]` | 최수인 |
 | GET | `/api/dashboard/summary?user_id=` | 과목별 정답률. 응답: `{subjects: {subject, total, correct, accuracy}[]}` | 최수인 |
 | GET | `/api/dashboard/comparison?user_id=` | 내 과목별 정답률 vs 전체 이용자 평균. 응답: `{subjects: {subject, my_total, my_correct, my_accuracy, overall_total, overall_correct, overall_accuracy}[], total_users}` | 최수인 |
+| GET | `/api/dashboard/exam-reference` | 제29회(2025년) 물류관리사 실제 시험 결과 참고 데이터(정적). 응답: `{round, year, exam_date, result_date, applicants, examinees, attendance_rate, passed, pass_rate, fail_rate, fail_rate_note}` | 최수인 |
 
 DB 스키마: `app/db/models.py` (Document, QuizQuestion, QuizAttempt, WrongNote). 서버 시작 시 `Base.metadata.create_all` + `app/db/seed.py`로 물류관리론·물류관련법규 샘플 문제가 자동 적재됩니다(테이블이 비어있을 때만).

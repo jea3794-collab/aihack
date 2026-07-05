@@ -6,6 +6,8 @@ import { getUserId } from "@/lib/user";
 import {
   fetchDashboardComparison,
   fetchDashboardSummary,
+  fetchExamReference,
+  type ExamReference,
   type SubjectComparison,
   type SubjectSummary,
 } from "@/lib/api";
@@ -18,6 +20,8 @@ export default function DashboardPage() {
   const [comparison, setComparison] = useState<SubjectComparison[]>([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [comparisonLoading, setComparisonLoading] = useState(true);
+
+  const [examReference, setExamReference] = useState<ExamReference | null>(null);
 
   useEffect(() => {
     fetchDashboardSummary(getUserId())
@@ -32,6 +36,10 @@ export default function DashboardPage() {
       })
       .catch(() => {})
       .finally(() => setComparisonLoading(false));
+
+    fetchExamReference()
+      .then(setExamReference)
+      .catch(() => {});
   }, []);
 
   const weakest = subjects.length
@@ -122,6 +130,58 @@ export default function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {examReference && (
+        <>
+          <h2 className="mt-10 text-lg font-semibold">실제 시험 결과 참고</h2>
+          <p className="mt-1 text-xs text-gray-500">
+            제{examReference.round}회({examReference.year}년) · 시행일{" "}
+            {examReference.examDate} · 발표일 {examReference.resultDate}
+          </p>
+
+          <div className="glass-panel mt-3 rounded-xl p-4">
+            <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+              <div>
+                <p className="text-gray-500">접수인원</p>
+                <p className="mt-1 font-semibold">
+                  {examReference.applicants.toLocaleString()}명
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">응시인원</p>
+                <p className="mt-1 font-semibold">
+                  {examReference.examinees.toLocaleString()}명
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">합격인원</p>
+                <p className="mt-1 font-semibold">
+                  {examReference.passed.toLocaleString()}명
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">응시율</p>
+                <p className="mt-1 font-semibold">{examReference.attendanceRate}%</p>
+              </div>
+              <div>
+                <p className="text-gray-500">합격률</p>
+                <p className="mt-1 font-semibold text-brand-green">
+                  {examReference.passRate}%
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">불합격률</p>
+                <p className="mt-1 font-semibold text-brand-orange">
+                  {examReference.failRate}%
+                </p>
+              </div>
+            </div>
+            <p className="mt-4 text-xs leading-relaxed text-gray-500">
+              {examReference.failRateNote}
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

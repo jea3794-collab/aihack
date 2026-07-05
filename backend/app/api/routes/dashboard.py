@@ -106,3 +106,39 @@ def comparison(user_id: str, db: Session = Depends(get_db)) -> DashboardComparis
         for subject, data in sorted(overall.items())
     ]
     return DashboardComparison(subjects=subjects, total_users=len(user_ids))
+
+
+class ExamReference(BaseModel):
+    round: int
+    year: int
+    exam_date: str
+    result_date: str
+    applicants: int
+    examinees: int
+    attendance_rate: float
+    passed: int
+    pass_rate: float
+    fail_rate: float
+    fail_rate_note: str
+
+
+# 제29회(2025년) 물류관리사 시험 실제 결과 (시행기관 발표 자료 기준).
+# 과목별 과락률은 원자료에 없어 산출 불가 — 전체 응시/합격 인원 기준 수치만 제공.
+EXAM_REFERENCE = ExamReference(
+    round=29,
+    year=2025,
+    exam_date="2025-07-26",
+    result_date="2025-08-27",
+    applicants=12704,
+    examinees=7948,
+    attendance_rate=62.56,
+    passed=2653,
+    pass_rate=33.38,
+    fail_rate=66.62,
+    fail_rate_note="과락(과목별 40점 미만)과 평균 미달(60점 미만)을 모두 포함한 전체 불합격률이며, 과목별 과락률은 공개되지 않아 산출할 수 없습니다.",
+)
+
+
+@router.get("/exam-reference", response_model=ExamReference)
+def exam_reference() -> ExamReference:
+    return EXAM_REFERENCE
