@@ -3,9 +3,20 @@
 // 담당: 장민준 — AI Q&A 화면 (질문 입력 + 근거 원문 표시)
 import { useState } from "react";
 import { askQuestion, type AskResponse } from "@/lib/api";
+import { cn } from "@/lib/utils";
+import type { Subject } from "@/types";
+
+const SUBJECTS: Subject[] = [
+  "물류관리론",
+  "화물운송론",
+  "보관하역론",
+  "국제물류론",
+  "물류관련법규",
+];
 
 export default function AiTutorPage() {
   const [question, setQuestion] = useState("");
+  const [subject, setSubject] = useState<Subject | null>(null);
   const [answer, setAnswer] = useState<AskResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +28,7 @@ export default function AiTutorPage() {
     setLoading(true);
     setError(null);
     try {
-      const result = await askQuestion(question.trim());
+      const result = await askQuestion(question.trim(), subject ?? undefined);
       setAnswer(result);
     } catch {
       setError("답변을 가져오지 못했습니다. 잠시 후 다시 시도해주세요.");
@@ -40,6 +51,34 @@ export default function AiTutorPage() {
         <p className="mt-1 text-sm text-muted-foreground">
           법령·개념에 대해 질문하면 문서 근거와 함께 답변합니다.
         </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => setSubject(null)}
+          className={cn(
+            "rounded-full px-4 py-1.5 text-sm transition",
+            subject === null
+              ? "bg-brand-gradient text-white"
+              : "hover:bg-black/5 dark:hover:bg-white/5",
+          )}
+        >
+          전체
+        </button>
+        {SUBJECTS.map((s) => (
+          <button
+            key={s}
+            onClick={() => setSubject(s)}
+            className={cn(
+              "rounded-full px-4 py-1.5 text-sm transition",
+              subject === s
+                ? "bg-brand-gradient text-white"
+                : "hover:bg-black/5 dark:hover:bg-white/5",
+            )}
+          >
+            {s}
+          </button>
+        ))}
       </div>
 
       <div className="flex gap-2">

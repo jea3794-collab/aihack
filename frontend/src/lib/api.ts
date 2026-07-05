@@ -10,11 +10,11 @@ export type AskResponse = {
   sources: string[];
 };
 
-export async function askQuestion(question: string): Promise<AskResponse> {
+export async function askQuestion(question: string, subject?: string): Promise<AskResponse> {
   const res = await fetch(`${API_BASE_URL}/api/qa/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ question, subject }),
   });
   if (!res.ok) throw new Error("Failed to fetch answer");
   return res.json();
