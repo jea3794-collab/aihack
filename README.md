@@ -1,4 +1,4 @@
-# LogiMentor
+# PassMate
 
 AI 기반 물류관리사 합격 전략 엔진 — AI 바이브 코딩 해커톤 프로젝트
 

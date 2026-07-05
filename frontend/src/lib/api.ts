@@ -118,3 +118,38 @@ export async function fetchDashboardSummary(userId: string): Promise<DashboardSu
   if (!res.ok) throw new Error("Failed to fetch dashboard summary");
   return res.json();
 }
+
+export type SubjectComparison = {
+  subject: string;
+  myTotal: number;
+  myCorrect: number;
+  myAccuracy: number;
+  overallTotal: number;
+  overallCorrect: number;
+  overallAccuracy: number;
+};
+
+export type DashboardComparison = {
+  subjects: SubjectComparison[];
+  totalUsers: number;
+};
+
+export async function fetchDashboardComparison(userId: string): Promise<DashboardComparison> {
+  const url = new URL(`${API_BASE_URL}/api/dashboard/comparison`);
+  url.searchParams.set("user_id", userId);
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error("Failed to fetch dashboard comparison");
+  const data = await res.json();
+  return {
+    totalUsers: data.total_users,
+    subjects: data.subjects.map((s: Record<string, number | string>) => ({
+      subject: s.subject,
+      myTotal: s.my_total,
+      myCorrect: s.my_correct,
+      myAccuracy: s.my_accuracy,
+      overallTotal: s.overall_total,
+      overallCorrect: s.overall_correct,
+      overallAccuracy: s.overall_accuracy,
+    })),
+  };
+}

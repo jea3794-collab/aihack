@@ -5,7 +5,7 @@ from app.api.routes import dashboard, documents, qa, quiz, wrong_notes
 from app.db.seed import seed_if_empty
 from app.db.session import Base, SessionLocal, engine
 
-app = FastAPI(title="LogiMentor API")
+app = FastAPI(title="PassMate API")
 
 app.add_middleware(
     CORSMiddleware,
