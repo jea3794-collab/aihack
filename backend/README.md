@@ -48,4 +48,4 @@ app/
 | GET | `/api/dashboard/comparison?user_id=` | 내 과목별 정답률 vs 전체 이용자 평균. 응답: `{subjects: {subject, my_total, my_correct, my_accuracy, overall_total, overall_correct, overall_accuracy}[], total_users}` | 최수인 |
 | GET | `/api/dashboard/exam-reference` | 제29회(2025년) 물류관리사 실제 시험 결과 참고 데이터(정적). 응답: `{round, year, exam_date, result_date, applicants, examinees, attendance_rate, passed, pass_rate, fail_rate, fail_rate_note}` | 최수인 |
 
-DB 스키마: `app/db/models.py` (Document, QuizQuestion, QuizAttempt, WrongNote). 서버 시작 시 `Base.metadata.create_all` + `app/db/seed.py`로 물류관리론·물류관련법규 샘플 문제가 자동 적재됩니다(테이블이 비어있을 때만).
+DB 스키마: `app/db/models.py` (Document, QuizQuestion, QuizAttempt, WrongNote). 서버 시작 시 `Base.metadata.create_all` + `app/db/seed.py`로 물류관리론·물류관련법규 샘플 문제가 자동 적재됩니다(테이블이 비어있을 때만). 또한 `물류관련 핵심용어해설집`(985개 용어)이 `app/db/data/logistics_glossary.json`에서 Document 테이블로 자동 적재되어 AI 자료 검색(`/api/qa/ask`)의 근거 문서로 사용됩니다.

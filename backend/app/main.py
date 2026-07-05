@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import dashboard, documents, qa, quiz, wrong_notes
-from app.db.seed import seed_if_empty
+from app.db.seed import seed_glossary_if_empty, seed_if_empty
 from app.db.session import Base, SessionLocal, engine
 
 app = FastAPI(title="PassMate API")
@@ -27,6 +27,7 @@ def on_startup() -> None:
     db = SessionLocal()
     try:
         seed_if_empty(db)
+        seed_glossary_if_empty(db)
     finally:
         db.close()
 

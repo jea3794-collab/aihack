@@ -1,9 +1,13 @@
 # 담당: 최수인 — 데모용 기출문제 시드 데이터 (PRD 3.1 스코프: 물류관리론 + 물류관련법규 우선)
 import json
+from pathlib import Path
 
 from sqlalchemy.orm import Session
 
-from app.db.models import QuizQuestion
+from app.db.models import Document, QuizQuestion
+
+GLOSSARY_SOURCE = "물류관련 핵심용어해설집"
+GLOSSARY_PATH = Path(__file__).parent / "data" / "logistics_glossary.json"
 
 SAMPLE_QUESTIONS = [
     {
@@ -150,6 +154,24 @@ def seed_if_empty(db: Session) -> None:
                 choices=json.dumps(item["choices"], ensure_ascii=False),
                 answer_index=item["answer_index"],
                 explanation=item.get("explanation"),
+            )
+        )
+    db.commit()
+
+
+def seed_glossary_if_empty(db: Session) -> None:
+    """물류관련 핵심용어해설집(신지원에듀)을 문서 DB에 적재해 AI 자료 검색(RAG)의 근거로 활용한다."""
+    if db.query(Document).filter(Document.source == GLOSSARY_SOURCE).count() > 0:
+        return
+    with open(GLOSSARY_PATH, encoding="utf-8") as f:
+        entries = json.load(f)
+    for item in entries:
+        db.add(
+            Document(
+                subject=item["subject"],
+                title=item["title"],
+                content=item["content"],
+                source=item["source"],
             )
         )
     db.commit()
