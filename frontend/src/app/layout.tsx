@@ -16,7 +16,9 @@ export default function RootLayout({
     <html lang="ko">
       <body className="flex min-h-screen">
         <Sidebar />
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1 border-l border-black/10 p-8 dark:border-white/10">
+          {children}
+        </main>
       </body>
     </html>
   );

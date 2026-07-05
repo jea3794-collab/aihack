@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="text-2xl font-bold">사용자 취약점 분석</h1>
+      <h1 className="text-2xl font-bold">취약점 비교분석</h1>
 
       {error && (
         <p className="mt-6 rounded-md bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400">

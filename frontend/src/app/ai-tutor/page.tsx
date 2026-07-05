@@ -47,7 +47,7 @@ export default function AiTutorPage() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h1 className="text-2xl font-bold">AI 튜터</h1>
+        <h1 className="text-2xl font-bold">AI 자료 검색</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           법령·개념에 대해 질문하면 문서 근거와 함께 답변합니다.
         </p>
