@@ -1,9 +1,9 @@
 "use client";
 
-// 자료 업로드 — PDF 법령/개념 문서를 업로드해 AI 튜터의 근거 문서로 등록
+// 자료 업로드 — 법령/개념 문서(PDF/DOCX/TXT, 여러 개면 ZIP)를 업로드해 AI 튜터의 근거 문서로 등록
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { fetchDocuments, uploadDocumentPdf, type DocumentItem } from "@/lib/api";
+import { fetchDocuments, uploadDocumentFile, type DocumentItem } from "@/lib/api";
 import type { Subject } from "@/types";
 
 const SUBJECTS: Subject[] = [
@@ -41,7 +41,7 @@ export default function DocumentsPage() {
     setUploading(true);
     setError(null);
     try {
-      await uploadDocumentPdf({
+      await uploadDocumentFile({
         file,
         subject,
         title: title.trim() || undefined,
@@ -63,7 +63,8 @@ export default function DocumentsPage() {
     <div className="mx-auto max-w-2xl">
       <h1 className="text-2xl font-bold">자료 업로드</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        법령·개념 PDF를 업로드하면 텍스트를 추출해 저장하고, AI 튜터가 근거 문서로 활용합니다.
+        법령·개념 문서(PDF, DOCX, TXT, 여러 개면 ZIP)를 업로드하면 텍스트를 추출해 저장하고, AI
+        튜터가 근거 문서로 활용합니다.
       </p>
 
       <div className="glass-panel mt-6 rounded-xl p-6">
@@ -87,14 +88,14 @@ export default function DocumentsPage() {
         <div className="mt-4 flex flex-col gap-3">
           <input
             type="file"
-            accept="application/pdf"
+            accept=".pdf,.docx,.txt,.zip"
             ref={fileInputRef}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             className="text-sm"
           />
           <input
             className="rounded-md border border-black/10 bg-transparent px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-green dark:border-white/10"
-            placeholder="제목 (비워두면 파일명 사용)"
+            placeholder="제목 (비워두면 파일명 사용, ZIP은 항상 파일명 사용)"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />

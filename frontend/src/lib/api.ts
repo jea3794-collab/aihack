@@ -36,12 +36,12 @@ export async function fetchDocuments(subject?: string): Promise<DocumentItem[]> 
   return res.json();
 }
 
-export async function uploadDocumentPdf(params: {
+export async function uploadDocumentFile(params: {
   file: File;
   subject: string;
   title?: string;
   source?: string;
-}): Promise<DocumentItem> {
+}): Promise<DocumentItem[]> {
   const formData = new FormData();
   formData.append("file", params.file);
   formData.append("subject", params.subject);
