@@ -5,7 +5,7 @@
 # - QuizQuestion: 과목별 기출문제 은행
 # - WrongNote: 사용자 오답 기록
 
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Boolean, func
 from sqlalchemy.orm import relationship
 
 from app.db.session import Base
@@ -32,6 +32,19 @@ class QuizQuestion(Base):
     choices = Column(Text, nullable=False)  # JSON string: ["...", ...]
     answer_index = Column(Integer, nullable=False)
     explanation = Column(Text, nullable=True)
+
+
+class QuizAttempt(Base):
+    __tablename__ = "quiz_attempts"
+
+    id = Column(Integer, primary_key=True)
+    question_id = Column(Integer, ForeignKey("quiz_questions.id"), nullable=False)
+    user_id = Column(String, nullable=False)
+    selected_index = Column(Integer, nullable=False)
+    is_correct = Column(Boolean, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+
+    question = relationship("QuizQuestion")
 
 
 class WrongNote(Base):
