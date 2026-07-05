@@ -46,15 +46,15 @@ export default function WrongNotesPage() {
       <h1 className="text-2xl font-bold">오답노트</h1>
 
       {error && (
-        <p className="mt-6 rounded-md bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400">
+        <p className="mt-6 rounded-2xl bg-red-500/10 p-3 text-sm text-danger">
           {error}
         </p>
       )}
 
-      {loading && <p className="mt-6 text-sm text-gray-500">불러오는 중...</p>}
+      {loading && <p className="mt-6 text-sm text-muted">불러오는 중...</p>}
 
       {!loading && !error && notes.length === 0 && (
-        <p className="mt-6 text-sm text-gray-500">
+        <p className="mt-6 text-sm text-muted">
           아직 틀린 문제가 없습니다. 문제풀이에서 문제를 풀어보세요.
         </p>
       )}
@@ -65,9 +65,9 @@ export default function WrongNotesPage() {
           const solved = retryResult?.correct;
 
           return (
-            <div key={note.id} className="glass-panel rounded-xl p-6">
-              <div className="flex items-center justify-between text-xs text-gray-500">
-                <span className="rounded-full bg-black/5 px-2 py-0.5 dark:bg-white/10">
+            <div key={note.id} className="card p-6 transition hover:scale-[1.01]">
+              <div className="flex items-center justify-between text-xs text-muted">
+                <span className="rounded-full bg-primary-light px-2 py-0.5 text-primary-dark">
                   {note.subject}
                 </span>
                 <span>{new Date(note.createdAt).toLocaleString("ko-KR")}</span>
@@ -89,19 +89,19 @@ export default function WrongNotesPage() {
                         setRetryPicks((prev) => ({ ...prev, [note.id]: i }))
                       }
                       className={cn(
-                        "rounded-lg border px-4 py-2 text-left text-sm transition",
+                        "rounded-2xl border px-4 py-2 text-left text-sm transition",
                         "border-black/10 dark:border-white/10",
                         isCorrectAnswer &&
-                          "border-brand-green bg-brand-green/10 text-brand-green",
-                        wasSubmitted && !isCorrectAnswer && "border-red-500/60",
+                          "border-success bg-success/10 text-success",
+                        wasSubmitted && !isCorrectAnswer && "border-danger/60",
                         isRetryPick && solved === undefined &&
-                          "border-brand-green bg-brand-green/10",
+                          "border-success bg-success/10",
                         !solved && "hover:bg-black/5 dark:hover:bg-white/5",
                       )}
                     >
                       {choice}
                       {wasSubmitted && (
-                        <span className="ml-2 text-xs text-gray-500">(제출한 답)</span>
+                        <span className="ml-2 text-xs text-muted">(제출한 답)</span>
                       )}
                     </button>
                   );
@@ -116,7 +116,7 @@ export default function WrongNotesPage() {
 
               <div className="mt-4 flex items-center justify-end gap-3">
                 {retryResult && (
-                  <span className={solved ? "text-sm text-brand-green" : "text-sm text-red-600"}>
+                  <span className={solved ? "text-sm text-success" : "text-sm text-danger"}>
                     {solved ? "재출제 정답!" : "다시 틀렸습니다."}
                   </span>
                 )}
@@ -124,7 +124,7 @@ export default function WrongNotesPage() {
                   <button
                     onClick={() => handleRetry(note)}
                     disabled={retryPicks[note.id] === undefined || retrying === note.id}
-                    className="rounded-md bg-brand-gradient px-4 py-2 text-sm text-white disabled:opacity-40"
+                    className="rounded-2xl bg-primary px-4 py-2 text-sm text-white transition hover:scale-[1.02] disabled:opacity-40 disabled:hover:scale-100"
                   >
                     재출제
                   </button>

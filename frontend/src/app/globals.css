@@ -3,18 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --card-bg: #ffffff;
+  --card-border: rgba(17, 24, 39, 0.06);
 }
 
 .dark {
-  --glass-bg: rgba(20, 20, 20, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --card-bg: #111827;
+  --card-border: rgba(255, 255, 255, 0.08);
 }
 
-.glass-panel {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+body {
+  background: #f8fafc;
+}
+
+.dark body {
+  background: #0b1220;
+}
+
+@layer components {
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in-up 0.35s ease-out;
 }

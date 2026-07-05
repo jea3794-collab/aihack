@@ -8,14 +8,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        brand: {
-          green: "#22c55e",
-          orange: "#f97316",
-        },
+      fontFamily: {
+        sans: ["Pretendard", "-apple-system", "system-ui", "sans-serif"],
       },
-      backgroundImage: {
-        "brand-gradient": "linear-gradient(135deg, #22c55e 0%, #f97316 100%)",
+      colors: {
+        primary: {
+          DEFAULT: "#2563EB",
+          light: "#E6F1FB",
+          dark: "#185FA5",
+        },
+        secondary: "#38BDF8",
+        success: "#22C55E",
+        warning: "#F59E0B",
+        danger: "#EF4444",
+        background: "#F8FAFC",
+        card: "#FFFFFF",
+        muted: "#64748B",
       },
     },
   },

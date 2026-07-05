@@ -47,8 +47,8 @@ export default function AiTutorPage() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h1 className="text-2xl font-bold">AI 튜터</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <h1 className="text-2xl font-bold">AI 자료 검색</h1>
+        <p className="mt-1 text-sm text-muted">
           법령·개념에 대해 질문하면 문서 근거와 함께 답변합니다.
         </p>
       </div>
@@ -57,10 +57,10 @@ export default function AiTutorPage() {
         <button
           onClick={() => setSubject(null)}
           className={cn(
-            "rounded-full px-4 py-1.5 text-sm transition",
+            "rounded-2xl px-4 py-1.5 text-sm transition",
             subject === null
-              ? "bg-brand-gradient text-white"
-              : "hover:bg-black/5 dark:hover:bg-white/5",
+              ? "bg-primary text-white"
+              : "text-muted hover:bg-black/5 dark:hover:bg-white/5",
           )}
         >
           전체
@@ -70,10 +70,10 @@ export default function AiTutorPage() {
             key={s}
             onClick={() => setSubject(s)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-sm transition",
+              "rounded-2xl px-4 py-1.5 text-sm transition",
               subject === s
-                ? "bg-brand-gradient text-white"
-                : "hover:bg-black/5 dark:hover:bg-white/5",
+                ? "bg-primary text-white"
+                : "text-muted hover:bg-black/5 dark:hover:bg-white/5",
             )}
           >
             {s}
@@ -83,7 +83,7 @@ export default function AiTutorPage() {
 
       <div className="flex gap-2">
         <input
-          className="glass-panel flex-1 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-green"
+          className="card flex-1 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
           placeholder="예: 보세구역과 자유무역지역의 차이는?"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
@@ -91,7 +91,7 @@ export default function AiTutorPage() {
           disabled={loading}
         />
         <button
-          className="rounded-md bg-brand-gradient px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-2xl bg-primary px-4 py-2 text-sm text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
           onClick={handleSubmit}
           disabled={!canSubmit}
         >
@@ -100,35 +100,35 @@ export default function AiTutorPage() {
       </div>
 
       {loading && (
-        <div className="glass-panel animate-pulse rounded-md p-4">
+        <div className="card animate-pulse p-4">
           <div className="h-3 w-3/4 rounded bg-black/10 dark:bg-white/10" />
           <div className="mt-2 h-3 w-1/2 rounded bg-black/10 dark:bg-white/10" />
         </div>
       )}
 
       {error && (
-        <div className="rounded-md border border-red-300 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
+        <div className="rounded-2xl border border-red-300 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
           {error}
         </div>
       )}
 
       {!loading && answer && (
-        <div className="glass-panel rounded-md p-4">
+        <div className="card animate-fade-in p-4">
           <p className="text-sm">{answer.answer}</p>
           {answer.sources.length > 0 ? (
             <div className="mt-3 flex flex-col gap-2">
-              <p className="text-xs font-medium text-muted-foreground">근거 원문</p>
+              <p className="text-xs font-medium text-muted">근거 원문</p>
               {answer.sources.map((source, i) => (
                 <div
                   key={i}
-                  className="rounded-md border border-black/10 bg-black/[0.02] p-3 text-xs leading-relaxed dark:border-white/10 dark:bg-white/[0.03]"
+                  className="rounded-2xl border border-black/10 bg-black/[0.02] p-3 text-xs leading-relaxed dark:border-white/10 dark:bg-white/[0.03]"
                 >
                   {source}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="mt-2 text-xs text-muted">
               근거 문서를 찾지 못했습니다. 확인이 필요한 답변입니다.
             </p>
           )}

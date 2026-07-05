@@ -82,10 +82,10 @@ export default function QuizPage() {
             key={s}
             onClick={() => setSubject(s)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-sm transition",
+              "rounded-2xl px-4 py-1.5 text-sm transition",
               subject === s
-                ? "bg-brand-gradient text-white"
-                : "glass-panel hover:bg-black/5 dark:hover:bg-white/5",
+                ? "bg-primary text-white"
+                : "card text-muted hover:bg-black/5 dark:hover:bg-white/5",
             )}
           >
             {s}
@@ -94,22 +94,22 @@ export default function QuizPage() {
       </div>
 
       {error && (
-        <p className="mt-6 rounded-md bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400">
+        <p className="mt-6 rounded-2xl bg-red-500/10 p-3 text-sm text-danger">
           {error}
         </p>
       )}
 
-      {loading && <p className="mt-6 text-sm text-gray-500">문제를 불러오는 중...</p>}
+      {loading && <p className="mt-6 text-sm text-muted">문제를 불러오는 중...</p>}
 
       {!loading && !error && questions.length === 0 && (
-        <p className="mt-6 text-sm text-gray-500">
+        <p className="mt-6 text-sm text-muted">
           아직 등록된 문제가 없습니다.
         </p>
       )}
 
       {!loading && question && index < questions.length && (
-        <div className="glass-panel mt-6 rounded-xl p-6">
-          <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="card mt-6 p-6">
+          <div className="flex items-center justify-between text-xs text-muted">
             <span>
               {index + 1} / {questions.length}
             </span>
@@ -132,12 +132,12 @@ export default function QuizPage() {
                   disabled={!!result}
                   onClick={() => setSelected(i)}
                   className={cn(
-                    "rounded-lg border px-4 py-2 text-left text-sm transition",
+                    "rounded-2xl border px-4 py-2 text-left text-sm transition",
                     "border-black/10 dark:border-white/10",
-                    isSelected && !result && "border-brand-green bg-brand-green/10",
-                    isAnswer && "border-brand-green bg-brand-green/10 text-brand-green",
-                    isWrongPick && "border-red-500 bg-red-500/10 text-red-600",
-                    !result && "hover:bg-black/5 dark:hover:bg-white/5",
+                    isSelected && !result && "border-success bg-success/10",
+                    isAnswer && "border-success bg-success/10 text-success",
+                    isWrongPick && "border-danger bg-danger/10 text-danger",
+                    !result && "hover:scale-[1.01] hover:bg-black/5 dark:hover:bg-white/5",
                   )}
                 >
                   {choice}
@@ -147,8 +147,8 @@ export default function QuizPage() {
           </div>
 
           {result && (
-            <div className="mt-4 rounded-lg bg-black/5 p-3 text-sm dark:bg-white/5">
-              <p className={result.correct ? "text-brand-green" : "text-red-600"}>
+            <div className="card animate-fade-in mt-4 p-3 text-sm">
+              <p className={result.correct ? "text-success" : "text-danger"}>
                 {result.correct ? "정답입니다!" : "오답입니다."}
               </p>
               {result.explanation && (
@@ -162,14 +162,14 @@ export default function QuizPage() {
               <button
                 onClick={handleSubmit}
                 disabled={selected === null || submitting}
-                className="rounded-md bg-brand-gradient px-4 py-2 text-sm text-white disabled:opacity-40"
+                className="rounded-2xl bg-primary px-4 py-2 text-sm text-white transition hover:scale-[1.02] disabled:opacity-40 disabled:hover:scale-100"
               >
                 제출
               </button>
             ) : (
               <button
                 onClick={handleNext}
-                className="rounded-md bg-brand-gradient px-4 py-2 text-sm text-white"
+                className="rounded-2xl bg-primary px-4 py-2 text-sm text-white transition hover:scale-[1.02]"
               >
                 {index + 1 < questions.length ? "다음 문제" : "결과 보기"}
               </button>
@@ -179,13 +179,13 @@ export default function QuizPage() {
       )}
 
       {!loading && questions.length > 0 && index >= questions.length && (
-        <div className="glass-panel mt-6 rounded-xl p-6 text-center">
+        <div className="card mt-6 p-6 text-center">
           <p className="text-lg font-semibold">
             {score.correct} / {score.total} 문제를 맞혔습니다.
           </p>
           <button
             onClick={handleRestart}
-            className="mt-4 rounded-md bg-brand-gradient px-4 py-2 text-sm text-white"
+            className="mt-4 rounded-2xl bg-primary px-4 py-2 text-sm text-white transition hover:scale-[1.02]"
           >
             다시 풀기
           </button>
