@@ -2,52 +2,96 @@
 
 // 담당: 장민준 — AI Q&A 화면 (질문 입력 + 근거 원문 표시)
 import { useState } from "react";
-import { askQuestion } from "@/lib/api";
+import { askQuestion, type AskResponse } from "@/lib/api";
 
 export default function AiTutorPage() {
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState<{ answer: string; sources: string[] } | null>(null);
+  const [answer, setAnswer] = useState<AskResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const canSubmit = question.trim().length > 0 && !loading;
 
   async function handleSubmit() {
+    if (!canSubmit) return;
     setLoading(true);
+    setError(null);
     try {
-      const result = await askQuestion(question);
+      const result = await askQuestion(question.trim());
       setAnswer(result);
+    } catch {
+      setError("답변을 가져오지 못했습니다. 잠시 후 다시 시도해주세요.");
+      setAnswer(null);
     } finally {
       setLoading(false);
     }
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+      handleSubmit();
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">AI 튜터</h1>
-      {/* TODO: 실제 입력 컴포넌트(shadcn Input/Button)로 교체 */}
+      <div>
+        <h1 className="text-2xl font-bold">AI 튜터</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          법령·개념에 대해 질문하면 문서 근거와 함께 답변합니다.
+        </p>
+      </div>
+
       <div className="flex gap-2">
         <input
-          className="glass-panel flex-1 rounded-md px-3 py-2 text-sm"
+          className="glass-panel flex-1 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-green"
           placeholder="예: 보세구역과 자유무역지역의 차이는?"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={loading}
         />
         <button
-          className="rounded-md bg-brand-gradient px-4 py-2 text-sm text-white"
+          className="rounded-md bg-brand-gradient px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
           onClick={handleSubmit}
-          disabled={loading}
+          disabled={!canSubmit}
         >
-          질문하기
+          {loading ? "답변 생성 중..." : "질문하기"}
         </button>
       </div>
-      {answer && (
+
+      {loading && (
+        <div className="glass-panel animate-pulse rounded-md p-4">
+          <div className="h-3 w-3/4 rounded bg-black/10 dark:bg-white/10" />
+          <div className="mt-2 h-3 w-1/2 rounded bg-black/10 dark:bg-white/10" />
+        </div>
+      )}
+
+      {error && (
+        <div className="rounded-md border border-red-300 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
+          {error}
+        </div>
+      )}
+
+      {!loading && answer && (
         <div className="glass-panel rounded-md p-4">
           <p className="text-sm">{answer.answer}</p>
-          {/* TODO: 근거 원문 카드 UI로 개선 */}
-          {answer.sources.length > 0 && (
-            <ul className="mt-2 list-disc pl-5 text-xs text-muted-foreground">
-              {answer.sources.map((s, i) => (
-                <li key={i}>{s}</li>
+          {answer.sources.length > 0 ? (
+            <div className="mt-3 flex flex-col gap-2">
+              <p className="text-xs font-medium text-muted-foreground">근거 원문</p>
+              {answer.sources.map((source, i) => (
+                <div
+                  key={i}
+                  className="rounded-md border border-black/10 bg-black/[0.02] p-3 text-xs leading-relaxed dark:border-white/10 dark:bg-white/[0.03]"
+                >
+                  {source}
+                </div>
               ))}
-            </ul>
+            </div>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">
+              근거 문서를 찾지 못했습니다. 확인이 필요한 답변입니다.
+            </p>
           )}
         </div>
       )}
