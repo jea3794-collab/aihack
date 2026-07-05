@@ -2,9 +2,6 @@ import type { WrongNote } from "@/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
-// TODO: 인증 붙기 전까지 사용하는 임시 데모 사용자 ID
-export const DEMO_USER_ID = "demo-user";
-
 export type AskResponse = {
   answer: string;
   sources: string[];

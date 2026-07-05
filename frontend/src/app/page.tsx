@@ -3,12 +3,8 @@
 // 담당: 장민준 — Home
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  DEMO_USER_ID,
-  fetchDashboardSummary,
-  fetchWrongNotes,
-  type SubjectSummary,
-} from "@/lib/api";
+import { fetchDashboardSummary, fetchWrongNotes, type SubjectSummary } from "@/lib/api";
+import { getUserId } from "@/lib/user";
 import type { WrongNote } from "@/types";
 
 export default function HomePage() {
@@ -18,9 +14,10 @@ export default function HomePage() {
 
   useEffect(() => {
     let cancelled = false;
+    const userId = getUserId();
     Promise.all([
-      fetchDashboardSummary(DEMO_USER_ID).catch(() => ({ subjects: [] })),
-      fetchWrongNotes(DEMO_USER_ID).catch(() => []),
+      fetchDashboardSummary(userId).catch(() => ({ subjects: [] })),
+      fetchWrongNotes(userId).catch(() => []),
     ]).then(([summary, notes]) => {
       if (cancelled) return;
       setSubjects(summary.subjects);
